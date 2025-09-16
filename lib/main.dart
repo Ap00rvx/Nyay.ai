@@ -15,10 +15,9 @@ class MyApp extends StatelessWidget {
       title: 'Nyay.ai',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.light,
       routerConfig: AppRouter.instance.router,
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
-// Removed the template counter page; routing now handled by GoRouter with placeholders.

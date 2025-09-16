@@ -28,8 +28,8 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
       appBarTheme: const AppBarTheme(
-        backgroundColor: primary,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         elevation: 0,
         centerTitle: true,
       ),

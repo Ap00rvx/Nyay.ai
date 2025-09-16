@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/case_intake/view/case_intake_page.dart';
+import '../../features/matching/view/matching_page.dart';
+import '../../features/tracking/view/tracking_page.dart';
+import '../../features/ai_chat/view/ai_chat_page.dart';
+import '../../core/domain/entities.dart';
+import '../../features/onboarding/view/onboarding_page.dart';
+import '../../features/auth/view/login_page.dart';
+import '../../features/auth/view/signup_page.dart';
+import '../../features/dashboard/view/dashboard_shell.dart';
 
 class AppRouter {
   AppRouter._internal();
@@ -13,6 +22,9 @@ class AppRouter {
   static const String splashRoute = '/';
   static const String homeRoute = '/home';
   static const String loginRoute = '/login';
+  static const String caseIntakeRoute = '/intake';
+  static const String signupRoute = '/signup';
+  static const String dashboardRoute = '/dashboard';
 
   final GoRouter router = GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -21,72 +33,55 @@ class AppRouter {
       GoRoute(
         path: splashRoute,
         name: 'splash',
-        builder: (context, state) => const _PlaceholderPage(
-          title: 'Splash',
-          subtitle: 'Replace with real SplashScreen',
-          icon: Icons.gavel_outlined,
-        ),
+        builder: (context, state) => const OnboardingPage(),
       ),
       GoRoute(
-        path: homeRoute,
-        name: 'home',
-        builder: (context, state) => const _PlaceholderPage(
-          title: 'Home',
-          subtitle: 'Replace with real HomeScreen',
-          icon: Icons.home_outlined,
-        ),
+        path: caseIntakeRoute,
+        name: 'intake',
+        builder: (context, state) => const CaseIntakePage(),
       ),
       GoRoute(
         path: loginRoute,
         name: 'login',
-        builder: (context, state) => const _PlaceholderPage(
-          title: 'Login',
-          subtitle: 'Replace with real LoginScreen',
-          icon: Icons.lock_outline,
-        ),
+        builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: signupRoute,
+        name: 'signup',
+        builder: (context, state) => const SignupPage(),
+      ),
+      GoRoute(
+        path: homeRoute,
+        name: 'home',
+        builder: (context, state) {
+          final data = state.extra;
+          if (data is! ClientCase) {
+            return const CaseIntakePage();
+          }
+          return MatchingPage(clientCase: data);
+        },
+      ),
+      GoRoute(
+        path: TrackingPage.routePath,
+        name: 'track',
+        builder: (context, state) {
+          final data = state.extra;
+          if (data is! ClientCase) return const CaseIntakePage();
+          return TrackingPage(clientCase: data);
+        },
+      ),
+      GoRoute(
+        path: '/ai',
+        name: 'ai',
+        builder: (context, state) => const AiChatPage(),
+      ),
+      GoRoute(
+        path: DashboardShell.routePath,
+        name: 'dashboard',
+        builder: (context, state) => const DashboardShell(),
       ),
     ],
   );
 }
 
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-  });
-
-  final String title;
-  final String subtitle;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 64, color: theme.colorScheme.primary),
-              const SizedBox(height: 16),
-              Text(title, style: theme.textTheme.headlineSmall),
-              const SizedBox(height: 8),
-              Text(
-                subtitle,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// Placeholder page removed; real pages wired.
